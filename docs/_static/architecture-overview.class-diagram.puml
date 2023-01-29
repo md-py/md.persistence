@@ -1,0 +1,78 @@
+@startuml
+
+skinparam class {
+  BackgroundColor #ebebeb
+  ArrowColor      #333
+  BorderColor     #000
+}
+
+skinparam lineType ortho
+
+package builtins {
+  class builtins.RuntimeError {}
+}
+
+package md.python.dict {
+  interface md.python.dict.MergeDictionaryInterface {
+    + merge(left: dict, right: dict) -> dict
+  }
+
+  class md.python.dict.DefaultMerge implements md.python.dict.MergeDictionaryInterface {
+    + merge(left: dict, right: dict) -> dict
+  }
+}
+
+package md.persistence {
+  interface LoadInterface {
+    + load(filename: str) -> Tuple[Any, GraphType]
+    + supports(filename: str) -> bool
+  }
+
+  interface DumpInterface {
+    + dump(filename: str, data: Any) -> None
+  }
+
+  interface ImportInterface {
+    + import_(content: dict, resource_list: List[Tuple[str, str]]) -> Tuple[dict, GraphType]
+  }
+
+  interface PersistenceExceptionInterface {}
+  class LoadException extends builtins.RuntimeError implements PersistenceExceptionInterface {
+    + path: str
+    ---
+    + __init__(code: int=0, path: str=None, *, **) -> None
+    ---
+    + {static} as_import_error(path: str=None, *, **) -> 'LoadException'
+  }
+
+  class DumpException extends builtins.RuntimeError implements PersistenceExceptionInterface {
+    + path: str
+    ---
+    + __init__(code: int=0, path: str=None, *, **) -> None
+  }
+
+  class ImportException extends builtins.RuntimeError implements PersistenceExceptionInterface {
+    + __init__(code: int=0, path: str=None, *, **) -> None
+    ---
+    + {static} as_not_exists(path: str=None, *, **) -> 'ImportException'
+    + {static} as_merge(path: str=None, *, **) -> 'ImportException'
+    + {static} as_recursion_error(path: str=None, *, **) -> 'ImportException'
+  }
+
+  class DefaultImport implements ImportInterface {
+    - load: LoadInterface
+    - merge_dictionary: md.python.dict.MergeDictionaryInterface
+    ---
+    + import_(content: dict, resource_list: List[Tuple[str, str]]) -> Tuple[Dict, GraphType]
+  }
+
+  DefaultImport *--> LoadInterface
+  DefaultImport *-> md.python.dict.MergeDictionaryInterface
+
+  LoadInterface .. LoadException : "raises >"
+  DumpInterface .. DumpException : "raises >"
+  ImportInterface .. ImportException : "raises >"
+  ImportException .. LoadException : "leads >"
+}
+
+@enduml
