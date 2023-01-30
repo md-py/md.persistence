@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - add `type` parameter into `md.persistence.LoadInterface` methods
 - add recursion protection implementation in `md.persistence.DefaultImport`
+- add unit tests
+
+## [0.2.0] - 2023-01-30
+### Added
+
+- Added for `md.persistence.LoadException` few reason codes (and related constructors):  
+  - `PARSE_ERROR`
+  - `NOT_SUPPORTED`
+  - `REQUIREMENT_MISSED`
 
 ## [0.1.1] - 2023-01-30
 ### Fix
@@ -19,5 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial implementation
 
+[0.2.0]: https://github.com/md-py/md.persistence/releases/tag/0.2.0
 [0.1.1]: https://github.com/md-py/md.persistence/releases/tag/0.1.1
 [0.1.0]: https://github.com/md-py/md.persistence/releases/tag/0.1.0

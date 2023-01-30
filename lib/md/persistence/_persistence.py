@@ -6,7 +6,7 @@ import md.python.dict
 
 # Metadata
 __author__ = 'https://md.land/md'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __all__ = (
     # Metadata
     '__author__',
@@ -59,6 +59,9 @@ class PersistenceExceptionInterface:
 
 class LoadException(RuntimeError, PersistenceExceptionInterface):
     IMPORT_ERROR = 1
+    PARSE_ERROR = 2
+    NOT_SUPPORTED = 3
+    REQUIREMENT_MISSED = 4
 
     def __init__(self, code: int = 0, path: str = None, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -68,6 +71,18 @@ class LoadException(RuntimeError, PersistenceExceptionInterface):
     @classmethod
     def as_import_error(cls, path: str = None, *args, **kwargs) -> 'LoadException':
         return cls(code=cls.IMPORT_ERROR, path=path, *args, **kwargs)
+
+    @classmethod
+    def as_parse_error(cls, path: str = None, *args, **kwargs) -> 'LoadException':
+        return cls(code=cls.PARSE_ERROR, path=path, *args, **kwargs)
+
+    @classmethod
+    def as_not_supported(cls, path: str = None, *args, **kwargs) -> 'LoadException':
+        return cls(code=cls.NOT_SUPPORTED, path=path, *args, **kwargs)
+
+    @classmethod
+    def as_requirement_missed(cls, path: str = None, *args, **kwargs) -> 'LoadException':
+        return cls(code=cls.REQUIREMENT_MISSED, path=path, *args, **kwargs)
 
 
 class DumpException(RuntimeError, PersistenceExceptionInterface):
