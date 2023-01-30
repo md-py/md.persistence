@@ -10,8 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add `type` parameter into `md.persistence.LoadInterface` methods
 - add recursion protection implementation in `md.persistence.DefaultImport`
 
+## [0.1.1] - 2023-01-30
+### Fix
+
+- Dependency `md.python.dict` requirement switched from `0.*` to `1.*` version.
+
 ## [0.1.0] - 2023-01-29
 
 - Initial implementation
 
+[0.1.1]: https://github.com/md-py/md.persistence/releases/tag/0.1.1
 [0.1.0]: https://github.com/md-py/md.persistence/releases/tag/0.1.0

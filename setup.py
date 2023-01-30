@@ -5,14 +5,14 @@ with open('readme.md') as fh:
 
 setuptools.setup(
     name='md.persistence',
-    version='0.1.0',
+    version='0.1.1',
     description='Set of persistence contracts & implementation',
     long_description=long_description,
     long_description_content_type='text/markdown',
     license='License :: OSI Approved :: MIT License',
     package_dir={'': 'lib'},
     packages=['md.persistence'],
-    install_requires=['md.python.dict==0.*'],
+    install_requires=['md.python.dict==1.*'],
     dependency_links=[
         'https://source.md.land/python/md-python-dict/'
     ],
