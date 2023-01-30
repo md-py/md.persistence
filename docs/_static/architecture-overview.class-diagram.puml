@@ -9,20 +9,19 @@ skinparam class {
 skinparam lineType ortho
 
 package builtins {
-  class builtins.RuntimeError {}
+  class builtins.RuntimeError <<(X,#FFA659)>> {}
 }
 
-package md.python.dict {
-  interface md.python.dict.MergeDictionaryInterface {
+namespace md.python.dict {
+  interface MergeDictionaryInterface {
     + merge(left: dict, right: dict) -> dict
   }
-
-  class md.python.dict.DefaultMerge implements md.python.dict.MergeDictionaryInterface {
+  class DefaultMergeDictionary implements MergeDictionaryInterface {
     + merge(left: dict, right: dict) -> dict
   }
 }
 
-package md.persistence {
+namespace md.persistence {
   interface LoadInterface {
     + load(filename: str) -> Tuple[Any, GraphType]
     + supports(filename: str) -> bool
@@ -37,26 +36,43 @@ package md.persistence {
   }
 
   interface PersistenceExceptionInterface {}
-  class LoadException extends builtins.RuntimeError implements PersistenceExceptionInterface {
-    + path: str
+  class LoadException <<(X,#FFA659)>> extends builtins.RuntimeError implements PersistenceExceptionInterface {
+    + {static} IMPORT_ERROR = 1
+    + {static} PARSE_ERROR = 2
+    + {static} NOT_SUPPORTED = 3
+    + {static} REQUIREMENT_MISSED = 4
     ---
-    + __init__(code: int=0, path: str=None, *, **) -> None
+    + code: int = 0
+    + path: str = None
     ---
-    + {static} as_import_error(path: str=None, *, **) -> 'LoadException'
+    + {static} as_import_error(path: str = None, *, **) -> 'LoadException'
+    + {static} as_parse_error(cls, path: str = None, *args, **kwargs) -> 'LoadException'
+    + {static} as_not_supported(cls, path: str = None, *args, **kwargs) -> 'LoadException'
+    + {static} as_requirement_missed(cls, path: str = None, *args, **kwargs) -> 'LoadException'
+    ---
+    + __init__(code: int = 0, path: str = None, *, **) -> None
   }
 
-  class DumpException extends builtins.RuntimeError implements PersistenceExceptionInterface {
-    + path: str
+  class DumpException <<(X,#FFA659)>> extends builtins.RuntimeError implements PersistenceExceptionInterface {
+    + code: int = 0
+    + path: str = None
     ---
-    + __init__(code: int=0, path: str=None, *, **) -> None
+    + __init__(code: int = 0, path: str = None, *, **) -> None
   }
 
-  class ImportException extends builtins.RuntimeError implements PersistenceExceptionInterface {
-    + __init__(code: int=0, path: str=None, *, **) -> None
+  class ImportException <<(X,#FFA659)>> extends builtins.RuntimeError implements PersistenceExceptionInterface {
+    + {static} NOT_EXISTS = 1
+    + {static} MERGE_ERROR = 2
+    + {static} RECURSION_ERROR = 3
     ---
-    + {static} as_not_exists(path: str=None, *, **) -> 'ImportException'
-    + {static} as_merge(path: str=None, *, **) -> 'ImportException'
-    + {static} as_recursion_error(path: str=None, *, **) -> 'ImportException'
+    + code: int = 0
+    + path: str = None
+    ---
+    + {static} as_not_exists(path: str = None, *, **) -> 'ImportException'
+    + {static} as_merge(path: str = None, *, **) -> 'ImportException'
+    + {static} as_recursion_error(path: str = None, *, **) -> 'ImportException'
+    ---
+    + __init__(code: int = 0, path: str = None, *, **) -> None
   }
 
   class DefaultImport implements ImportInterface {
